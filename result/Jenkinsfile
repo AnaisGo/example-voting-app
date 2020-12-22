@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    tools{
+        NodeJS 'NodeJS 8.9'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Compile result application'
+                dir('result'){
+                sh 'npm install'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Execute Unit Test on worker application'
+				dir('result'){
+				sh 'npm install && npm test'}
+            }
+        }
+    }
+    post{
+        always{
+            echo 'This is my first pipeline'
+        }
+    }
+}
