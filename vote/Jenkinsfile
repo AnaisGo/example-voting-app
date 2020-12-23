@@ -1,0 +1,40 @@
+pipeline{
+	agent{
+		docker{
+			image 'python:2.7.16-slim'
+		}
+	}
+	stages{
+		stage('Build'){
+			when{
+				changeset '**/vote/**'
+			}
+			steps{
+				echo 'Install python packages'
+				dir('vote'){
+					sh 'pip install -i requirements.txt'
+				}
+			}
+		}
+		stage('Test'){
+			when{
+				changeset "**/vote/**"
+			}
+			steps{
+				echo 'Execute unit tests'
+				sh 'nosetests -v'
+				}
+		}
+	}
+	post{
+		always{
+			echo 'blabla'
+		}
+		failure{
+			echo 'Pipeline fails'
+		}
+		success{
+			echo 'Pipeline succeeds'
+		}
+	}
+}
